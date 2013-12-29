@@ -1,0 +1,17 @@
+{
+    "name": "getfokus/positionly",
+    "description": "PHP library for positionly.com",
+    "require": {
+        "evert/oauth2": "*"
+    },
+    "license": "Apache 2.0",
+    "authors": [
+        {
+            "name": "Athlan",
+            "email": "me@athlan.pl"
+        }
+    ],
+	"autoload": {
+		"psr-0": {"PositionlyApi": "src/"}
+	}
+}
