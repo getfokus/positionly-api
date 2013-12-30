@@ -4,10 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use PositionlyApi\PositionlyApi;
 
-$clientId = '';
-$clientSecret = '';
-$username = '';
-$password = '';
+require '_credentials.php';
 
 $client = new OAuth2\Client($clientId, $clientSecret);
 
@@ -24,9 +21,11 @@ $client->setAccessToken($accessToken['access_token']);
 $api = new PositionlyApi($client);
 
 // get accounts
-$response = $api->call('/accounts');
+$response = $api->get('/accounts');
+$result = $response->getResult();
+
 // get first account id
-$accountId = $response[0]['id'];
+$accountId = $result[0]['id'];
 
 // get first website id
 $params = array(
@@ -34,21 +33,29 @@ $params = array(
 	'name' => 'onet.pl',
 	'title' => 'onet.pl title',
 
-	/*'website_engines_attributes' => array(
+	'website_engines_attributes' => array(
 	    array(
 			"engine_id" => 43,
 		)
-	)*/
+	)
 );
-$params = '{
-  "scheme": "http",
-  "name": "example.com",
-  "title": "Example",
-  "website_engines_attributes": [
-    { "engine_id": 31 }
-  ]
-}';
-$response = $api->call(sprintf('/accounts/%s/websites', $accountId), $params, 'POST');
+
+$response = $api->post(sprintf('/accounts/%s/websites', $accountId), $params);
+$result = $response->getResult();
+
+if($response->isSuccess()) {
+	echo 'Success!';
+}
+else {
+	echo 'Failure:';
+	var_dump($result['errors']);
+	exit;
+}
+
+$createdWebsiteId = $result['website']['id'];
+
+$response = $api->delete(sprintf('/accounts/%s/websites/%s', $accountId, $createdWebsiteId));
+$result = $response->getResult();
 
 print_r($response);
 exit;

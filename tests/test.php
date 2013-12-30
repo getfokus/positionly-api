@@ -4,10 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use PositionlyApi\PositionlyApi;
 
-$clientId = '';
-$clientSecret = '';
-$username = '';
-$password = '';
+require '_credentials.php';
 
 $client = new OAuth2\Client($clientId, $clientSecret);
 
@@ -20,7 +17,6 @@ $result = $client->getAccessToken(PositionlyApi::getTokenEndpoint(), 'password',
 $accessToken = json_decode($result['result'], true);
 
 $client->setAccessToken($accessToken['access_token']);
-$client->setAccessTokenType(OAuth2\Client::ACCESS_TOKEN_OAUTH);
 
 $api = new PositionlyApi($client);
 
@@ -40,6 +36,13 @@ $keywordId = $response[0]['id'];
 $engineId = 43; // google polska
 
 $response = $api->call(sprintf('/accounts/%s/websites/%s/engines/%s/keywords/%s/positions', $accountId, $websiteId, $engineId, $keywordId));
+
+if($response->isSuccess()) {
+	echo 'Success!';
+}
+else {
+	echo 'Failure';
+}
 
 print_r($response);
 exit;
