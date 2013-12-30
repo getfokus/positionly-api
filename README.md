@@ -29,6 +29,7 @@ Usage instructions
   // the $response contains the array with result
   ```
 
+### `GET` request
 To make `GET` request just use:
 ```php
 $response = $api->get('/accounts');
@@ -45,6 +46,7 @@ else {
 }
 ```
 
+### `DELETE` request
 To make `DELETE` request just use:
 ```php
 $response = $api->delete('/accounts/<account id>/websites/<website id>');
@@ -57,6 +59,7 @@ else {
 }
 ```
 
+### `POST` request
 To make `POST` request just use:
 ```php
 $params = array(
@@ -87,7 +90,7 @@ else {
 }
 ```
 
-Full example:
+### Full example
 
 ```php
 <?php
