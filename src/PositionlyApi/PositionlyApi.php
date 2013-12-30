@@ -43,23 +43,55 @@ class PositionlyApi {
 	public function setClient(OAuth2Client $client) {
 		$this->client = $client;
 	}
-
+	
+	public function get($resource_url, $parameters = array()) {
+		return $this->call($resource_url, $parameters, 'GET');
+	}
+	
+	public function post($resource_url, $parameters = array()) {
+		return $this->call($resource_url, $parameters, 'POST');
+	}
+	
+	public function delete($resource_url, $parameters = array()) {
+		return $this->call($resource_url, $parameters, 'DELETE');
+	}
+	
 	public function call($resource_url, $parameters = array(), $http_method = 'GET', array $http_headers = array()) {
 		$url = $this->apiUrl . $resource_url . '.json';
 		
-		$result = $this->client->fetch($url, $parameters, $http_method, $http_headers);
-		
-		$code = isset($result['code']) ? $result['code'] : 0;
-		$body = isset($result['result']) ? json_decode($result['result'], true) : array();
-		
-		if($code !== 200) {
-			// an error occured.
-			if(isset($body['message']))
-				throw new PositionlyApiException($body['message'], $code);
+		if($http_method === 'POST') {
+			// Positionly expects JSON as post input format
+			if(is_string($parameters)) {
+				$parameters = json_decode($parameters, true);
+				
+				if(!is_array($parameters))
+					throw new PositionlyApiException('Invalid JSON string in POST parameter');
+			}
 			
-			throw new PositionlyApiException("Unknown error (no message)", $code);
+			if(is_array($parameters)) {
+				$parameters = json_encode($parameters);
+			}
+			else
+				throw new PositionlyApiException('Invalid POST parameter. JSON string or array expected.');
 		}
 		
-		return $body;
+		$result = $this->client->fetch($url, $parameters, $http_method, $http_headers);
+		
+		$response = PositionlyApiResponse::createResponse($result['code'], $result['result'], $http_method);
+		$responseResult = $response->getResult();
+		
+		if($response->getResponseCode() !== 200) {
+			// an error occured.
+			if(isset($responseResult['message']))
+				throw new PositionlyApiException($responseResult['message'], $response->getResponseCode());
+			
+			// bad request, there are errors in form
+			if($response->getResponseCode() === 400 && isset($responseResult['errors']))
+				return $response;
+			
+			throw new PositionlyApiException("Unknown error (no message)", $response->getResponseCode());
+		}
+		
+		return $response;
 	}
 }
