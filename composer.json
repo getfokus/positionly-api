@@ -2,7 +2,7 @@
     "name": "getfokus/positionly",
     "description": "PHP library for positionly.com",
     "require": {
-        "evert/oauth2": "*"
+        "evert/oauth2": "dev-master"
     },
     "license": "Apache 2.0",
     "authors": [
@@ -11,7 +11,13 @@
             "email": "me@athlan.pl"
         }
     ],
-	"autoload": {
-		"psr-0": {"PositionlyApi": "src/"}
-	}
+    "autoload": {
+        "psr-0": {"PositionlyApi": "src/"}
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git://github.com/getfokus/oauth2.git"
+        }
+    ]
 }
