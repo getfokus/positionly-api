@@ -1,12 +1,31 @@
+
 PHP library for Positionly
 ==============
 
 Full API documentation: https://positionly.com/api
 
+**Table of Contents**
+- [PHP library for Positionly](#php-library-for-positionly)
+	- [Author & Contact](#author-&-contact)
+	- [Installation](#installation)
+		- [Composer](#composer)
+	- [Usage instructions](#usage-instructions)
+		- [`GET` request](#get-request)
+		- [`DELETE` request](#delete-request)
+		- [`POST` request](#post-request)
+		- [Full example](#full-example)
+
+###Author & Contact
+----------------
+
+Piotr *Athlan* Pelczar
+    - me@athlan.pl
+
 Installation
 ------------------
 
 ###Composer
+----------------
 
 Add dependency in `composer.json`:
 
@@ -30,6 +49,8 @@ Usage instructions
   ```
 
 ### `GET` request
+----------------
+
 To make `GET` request just use:
 ```php
 $response = $api->get('/accounts');
@@ -60,6 +81,8 @@ else {
 ```
 
 ### `POST` request
+----------------
+
 To make `POST` request just use:
 ```php
 $params = array(
@@ -91,6 +114,7 @@ else {
 ```
 
 ### Full example
+----------------
 
 ```php
 <?php
@@ -125,10 +149,3 @@ print_r($response);
 
 ?>
 ```
-
-
-Author & Contact
-----------------
-
-Piotr *Athlan* Pelczar
-    - me@athlan.pl
